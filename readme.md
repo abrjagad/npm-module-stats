@@ -8,37 +8,69 @@ The size recursively includes the size of its dependencies and devdependencies' 
 * At some point, you want to keep your project as small as possible. However if the NPM modules that you use might increase the overall project size.
 * Just in case, if your are curious to know what modules will be downloaded with any NPM module.
 
-### Help
+### Install
 
 ```
-node index --help
-``` 
+//install globally to use it in terminal
+npm install -g npm-module-stats
+```
+
+```
+//add it to your project dependency
+npm install npm-module-stats --save
+```
+
 
 ### Usage
 
 ```
-node index --name=glob
+var stats = require("npm-module-stats");
+
+stats.getStats("glob").then((stack) => {
+
+  let dependencies = Object.keys(stack);
+  let totalSize = dependencies.reduce((result, key, index) => {
+    return result + stack[key].size;
+  }, 0);
+
+  console.log('Total Size ', totalSize);
+  console.log('Total Dependencies ', dependencies.length);
+
+}).catch((err) => {
+  console.error(err);
+});
+```
+
+### Command line Usage
+
+```
+npm-module-stats --name=glob
+```
+
+### Help
+
+```
+npm-module-stats --help
+``` 
+
+```
+npm-module-stats --name=glob
 
 Options:
-  -n, --name     Name of the NPM module to get stats for                                             [string] [required]
-  -m, --minimal  Stats in text representation                                                                  [boolean]
-  --verbose      Verbose output                                                                                [boolean]
-  --help         Show help                                                                                     [boolean]
+  --name, -n     Name of the NPM module to get stats for               [string] [required]
+  --minimal, -m  Stats in text representation                                    [boolean]
+  --verbose      Verbose output                                                  [boolean]
+  --help         Show help                                                       [boolean]
 
 Examples:
-  node index --name=glob          "Draw a statistics table for the latest version "
-  node index --name=glob@6.0.1    "Draw a statistics table for the specific version "
-  node index --name=glob --m      "Recursive total size "
-  node index --name=glob --m --v  "verbose output "
+  npm-module-stats --n=glob             "Draw a statistics table for the latest version "
+  npm-module-stats --n=glob@6.0.1       "Draw a statistics table for the specific version
+                                        "
+  npm-module-stats --n=glob --m         "Recursive total size "
+  npm-module-stats --name=glob --m --v  "verbose output "
 ```
 
 ### Output
-
-Run the below command:
-
-```
-node index --n glob
-```
 
 ``` 
 ┌───────┬──────────────────┬─────────┬───────┬─────────────────────────┐

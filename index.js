@@ -5,9 +5,9 @@ log.setLevel(2);
 
 const Table = require('cli-table2');
 const objectPath = require('object-path');
-const getRemoteFileSize = require("./remote-file-size");
-const Walk = require("./walk");
-const stats = require("./stats");
+const getRemoteFileSize = require("./lib/remote-file-size");
+const Walk = require("./lib/walk");
+const stats = require("./lib/stats");
 
 const getStats = stats.getStats;
 const getHierarchy = stats.getHierarchy;
@@ -19,19 +19,16 @@ const pushResultsArray = stats.pushResultsArray;
 var argv = require('yargs')
   .demand('name', 'Enter name of the npm module to get stats for!')
   .usage('node index --name=glob')
-  .example('node index --name=glob', '"Draw a statistics table for the latest version "')
-  .example('node index --name=glob@6.0.1', '"Draw a statistics table for the specific version "')
+  .example('node index --n=glob', '"Draw a statistics table for the latest version "')
+  .example('node index --n=glob@6.0.1', '"Draw a statistics table for the specific version "')
+  .example('node index --n=glob --m', '"Recursive total size "')
+  .example('node index --name=glob --m --v', '"verbose output "')
   .options({
     'n': {
       alias: 'name',
       demand: true,
       describe: 'Name of the NPM module to get stats for',
       type: 'string'
-    },
-    'ot': {
-      alias: 'only-total',
-      describe: 'Recursive total size of a NPM module with its dependencies size included',
-      type: 'boolean'
     },
     'm': {
       alias: 'minimal',
@@ -57,11 +54,6 @@ getStats(argv.n).then((stack) => {
   let totalSize = Object.keys(stack).reduce((result, key, index) => {
     return result + stack[key].size;
   }, 0);
-
-  if (argv.ot) {
-    console.log('Total Size ', totalSize);
-    return;
-  }
 
   if (argv.m) {
     console.log('Total Size ', totalSize);

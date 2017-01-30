@@ -1,14 +1,27 @@
 {
   "name": "npm-module-stats",
   "version": "0.0.1",
-  "description": "",
+  "description": "Get recursive file size and dependencies of any NPM module without installing the module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "module",
+    "size",
+    "stats"
+  ],
+  "author": "Abraham Jagadeesh <abraham.webdeveloper@gmail.com>",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/abrahamjagadeesh/npm-module-stats/blob/master/LICENSE"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/abrahamjagadeesh/npm-module-stats/issues"
+  },
+  "homepage": "https://github.com/abrahamjagadeesh/npm-module-stats.git#readme",
   "dependencies": {
     "cli-table2": "^0.2.0",
     "loglevel": "^1.4.1",

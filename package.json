@@ -1,6 +1,6 @@
 {
   "name": "npm-module-stats",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Get recursive file size and dependencies of any NPM module without installing the module",
   "main": "index.js",
   "scripts": {

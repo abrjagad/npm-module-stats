@@ -1,4 +1,4 @@
-# NPM Module Size
+# NPM Module Stats
 
 Get the approximate size of any NPM Module without installing / downloading it in your machine. 
 The size recursively includes the size of its dependencies and devdependencies' dependencies.
@@ -10,12 +10,12 @@ The size recursively includes the size of its dependencies and devdependencies' 
 
 ### Install
 
-```
+```shell
 //install globally to use it in terminal
 npm install -g npm-module-stats
 ```
 
-```
+```shell
 //add it to your project dependency
 npm install npm-module-stats --save
 ```
@@ -23,7 +23,7 @@ npm install npm-module-stats --save
 
 ### Usage
 
-```
+```js
 var stats = require("npm-module-stats");
 
 stats.getStats("glob").then((stack) => {
@@ -43,17 +43,17 @@ stats.getStats("glob").then((stack) => {
 
 ### Command line Usage
 
-```
+```shell
 npm-module-stats --name=glob
 ```
 
 ### Help
 
-```
+```shell
 npm-module-stats --help
 ``` 
 
-```
+```shell
 npm-module-stats --name=glob
 
 Options:
@@ -72,7 +72,7 @@ Examples:
 
 ### Output
 
-``` 
+```
 ┌───────┬──────────────────┬─────────┬───────┬─────────────────────────┐
 │ INDEX │ NAME             │ VERSION │ SIZE  │ DEPS                    │
 ├───────┼──────────────────┼─────────┼───────┼─────────────────────────┤
@@ -108,3 +108,7 @@ Examples:
 │       │                  │         │ 49738 │                         │
 └───────┴──────────────────┴─────────┴───────┴─────────────────────────┘
 ```
+
+### Author
+
+Abraham Jagadeesh

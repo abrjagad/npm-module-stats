@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
+'use strict';
 const log = require('loglevel');
 log.setLevel(2);
 
 const Table = require('cli-table2');
 const objectPath = require('object-path');
+const prettyBytes = require('pretty-bytes');
 
 const stats = require("../lib/stats");
 const getStats = stats.getStats;
@@ -16,7 +18,7 @@ var argv = require('yargs')
   .example('npm-module-stats --n=glob', '"Draw a statistics table for the latest version "')
   .example('npm-module-stats --n=glob@6.0.1', '"Draw a statistics table for the specific version "')
   .example('npm-module-stats --n=glob --m', '"Recursive total size "')
-  .example('npm-module-stats --name=glob --m --v', '"verbose output "')
+  .example('npm-module-stats --name=glob --m --verbose', '"verbose output "')
   .options({
     'name': {
       demand: true,
@@ -50,8 +52,8 @@ getStats(argv.n).then((stack) => {
   }, 0);
 
   if (argv.m) {
-    console.log('Total Size ', totalSize);
-    console.log('Total Dependencies ', Object.keys(stack).length);
+    console.log('Total Size ', prettyBytes(totalSize));
+    console.log('Total Dependencies ', Object.keys(stack).length - 1);
     return;
   }
 
@@ -68,13 +70,13 @@ getStats(argv.n).then((stack) => {
       ++j,
       dep.name,
       dep.key,
-      dep.size,
+      prettyBytes(dep.size),
       deps
     ]);
   }
 
-  table.push([, , , totalSize])
-
+  table.push([, , , "Exact compressed \nfile size \n" + prettyBytes(totalSize)])
+  table.push([, , , "Appromixate file \nsize after \nuncompression \n" + prettyBytes(totalSize * 3)])
 
   console.log(table.toString());
 

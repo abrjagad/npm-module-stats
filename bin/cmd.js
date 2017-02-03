@@ -12,8 +12,7 @@ const stats = require("../lib/stats");
 const getStats = stats.getStats;
 const getHierarchy = stats.getHierarchy;
 
-
-var argv = require('yargs')
+const argv = require('yargs')
   .usage('npm-module-stats --name=glob')
   .example('npm-module-stats --n=glob', '"Draw a statistics table for the latest version "')
   .example('npm-module-stats --n=glob@6.0.1', '"Draw a statistics table for the specific version "')
@@ -75,11 +74,10 @@ getStats(argv.n).then((stack) => {
     ]);
   }
 
-  table.push([, , , "Exact compressed \nfile size \n" + prettyBytes(totalSize)])
-  table.push([, , , "Appromixate file \nsize after \nuncompression \n" + prettyBytes(totalSize * 3)])
+  table.push([, , , "Exact compressed \nfile size \n" + prettyBytes(totalSize)]);
+  table.push([, , , "Appromixate file \nsize after \nuncompression \n" + prettyBytes(totalSize * 3)]);
 
   console.log(table.toString());
-
 
 }).catch((err) => {
   log.error('Error has occured. Please raise a Git issue incase of code issue. \n', err);

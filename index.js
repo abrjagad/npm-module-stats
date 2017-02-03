@@ -9,7 +9,6 @@ const pushHierarchy = stats.pushHierarchy;
 const getResultsArray = stats.getResultsArray;
 const pushResultsArray = stats.pushResultsArray;
 
-
 module.exports = {
   getStats,
   getHierarchy,
@@ -18,4 +17,4 @@ module.exports = {
   pushResultsArray,
   getRemoteFileSize,
   Walk
-}
+};

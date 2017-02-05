@@ -25,6 +25,10 @@ const argv = require('yargs')
       describe: 'Name of the NPM module to get stats for',
       type: 'string'
     },
+    'version': {
+      describe: 'Version of the NPM module to get stats for',
+      type: 'string'
+    },
     'minimal': {
       alias: 'm',
       describe: 'Stats in text representation',
@@ -44,7 +48,7 @@ if (argv.verbose) {
   log.enableAll();
 }
 
-getStats(argv.n).then((stack) => {
+getStats(argv.n, argv.version).then((stack) => {
 
   let totalSize = Object.keys(stack).reduce((result, key, index) => {
     return result + stack[key].size;

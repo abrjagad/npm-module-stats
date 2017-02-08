@@ -1,84 +1,89 @@
 #!/usr/bin/env node
 
-'use strict';
-const log = require('loglevel');
-log.setLevel(2);
+"use strict";
+const log = require("loglevel");
+log.setLevel(3);
 
-const Table = require('cli-table2');
-const objectPath = require('object-path');
-const prettyBytes = require('pretty-bytes');
+const getStats = require("../lib/stats");
 
-const stats = require("../lib/stats");
-const getStats = stats.getStats;
-const getHierarchy = stats.getHierarchy;
-
-const argv = require('yargs')
-  .usage('npm-module-stats --name=glob')
-  .example('npm-module-stats --n=glob', '"Draw a statistics table for the latest version "')
-  .example('npm-module-stats --n=glob@6.0.1', '"Draw a statistics table for the specific version "')
-  .example('npm-module-stats --n=glob --m', '"Recursive total size "')
-  .example('npm-module-stats --name=glob --m --verbose', '"verbose output "')
+const argv = require("yargs")
+  .usage("npm-module-stats --name=glob")
+  .example(
+    "npm-module-stats --n=glob",
+    '"Draw a statistics table for the latest version "'
+  )
+  .example(
+    "npm-module-stats --n=glob --version='^6.0.1'",
+    '"Draw a statistics table for the specific version "'
+  )
+  .example(
+    "npm-module-stats --n=glob --format=html",
+    '"Ouput generated in HTML file "'
+  )
+  .example("npm-module-stats --name=glob --verbose", '"verbose output "')
   .options({
-    'name': {
+    name: {
       demand: true,
-      alias: 'n',
-      describe: 'Name of the NPM module to get stats for',
-      type: 'string'
+      alias: "n",
+      describe: "Name of the NPM module to get stats for",
+      type: "string"
     },
-    'minimal': {
-      alias: 'm',
-      describe: 'Stats in text representation',
-      type: 'boolean'
+    version: {
+      describe: "Version of the NPM module to get stats for",
+      type: "string"
     },
-    'verbose': {
-      describe: 'Verbose output',
-      type: 'boolean'
+    output: {
+      type: "string",
+      describe: "Output file name",
+      default: "npm-module-stats.html"
+    },
+    format: {
+      type: "string",
+      choices: ["less", "minimal", "table", "html"],
+      describe: "Output format",
+      default: "table"
+    },
+    verbose: {
+      describe: "Verbose output",
+      type: "boolean"
     }
   })
   .wrap(90)
-  .help()
-  .argv;
+  .help().argv;
 
 //control logger
 if (argv.verbose) {
   log.enableAll();
 }
 
-getStats(argv.n).then((stack) => {
+getStats(argv.n, argv.version)
+  .then(stack => {
+    //find the total size of all modules
+    let totalSize = Object.keys(stack).reduce(
+      (result, key, index) => {
+        return result + stack[key].size;
+      },
+      0
+    );
 
-  let totalSize = Object.keys(stack).reduce((result, key, index) => {
-    return result + stack[key].size;
-  }, 0);
-
-  if (argv.m) {
-    console.log('Total Size ', prettyBytes(totalSize));
-    console.log('Total Dependencies ', Object.keys(stack).length - 1);
-    return;
-  }
-
-  let tree = getHierarchy();
-  let table = new Table({ head: ['INDEX', 'NAME', 'VERSION', 'SIZE', 'DEPS'] });
-
-  let j = 0;
-  for (let i in stack) {
-
-    let dep = stack[i];
-    let deps = Object.keys(objectPath.get(tree, dep.tree)).join("\n");
-
-    table.push([
-      ++j,
-      dep.name,
-      dep.key,
-      prettyBytes(dep.size),
-      deps
-    ]);
-  }
-
-  table.push([, , , "Exact compressed \nfile size \n" + prettyBytes(totalSize)]);
-  table.push([, , , "Appromixate file \nsize after \nuncompression \n" + prettyBytes(totalSize * 3)]);
-
-  console.log(table.toString());
-
-}).catch((err) => {
-  log.error('Error has occured. Please raise a Git issue incase of code issue. \n', err);
-});
+    //reporter
+    switch (argv.format) {
+      case "minimal":
+        require("../reporter/minimal")(
+          totalSize,
+          Object.keys(stack).length - 1
+        );
+        break;
+      case "html":
+        require("../reporter/html")(stack, totalSize, argv);
+        break;
+      default:
+        require("../reporter/table")(stack, totalSize, argv);
+    }
+  })
+  .catch(err => {
+    log.error(
+      "Error has occured. Please raise a Git issue incase of code issue. \n",
+      err
+    );
+  });

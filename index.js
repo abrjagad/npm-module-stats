@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-const stats = require("./lib/stats");
+const getStats = require("./lib/stats");
 const Walk = require("./lib/walk");
 const getRemoteFileSize = require("./lib/remote-file-size");
-const getStats = stats.getStats;
-const getHierarchy = stats.getHierarchy;
-const pushHierarchy = stats.pushHierarchy;
-const getResultsArray = stats.getResultsArray;
-const pushResultsArray = stats.pushResultsArray;
+
+const pushHierarchy = Walk.pushHierarchy;
+const getHierarchy = Walk.getHierarchy;
+const getResultsArray = Walk.getResultsArray;
+const pushResultsArray = Walk.pushResultsArray;
 
 module.exports = {
   getStats,

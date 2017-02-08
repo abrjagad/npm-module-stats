@@ -51,20 +51,26 @@ stats.getStats("glob").then((stack) => {
 npm-module-stats --name=glob
 
 Options:
-  --name, -n     Name of the NPM module to get stats for               [string] [required]
-  --minimal, -m  Stats in text representation                                    [boolean]
-  --verbose      Verbose output                                                  [boolean]
-  --help         Show help                                                       [boolean]
+  --name, -n  Name of the NPM module to get stats for                  [string] [required]
+  --version   Version of the NPM module to get stats for                          [string]
+  --output    Output file name                 [string] [default: "npm-module-stats.html"]
+  --format    Output format
+                 [string] [choices: "less", "minimal", "table", "html"] [default: "table"]
+  --verbose   Verbose output                                                     [boolean]
+  --help      Show help                                                          [boolean]
 
 Examples:
-  npm-module-stats --n=glob             "Draw a statistics table for the latest version "
-  npm-module-stats --n=glob@6.0.1       "Draw a statistics table for the specific version
-                                        "
-  npm-module-stats --n=glob --m         "Recursive total size "
-  npm-module-stats --name=glob --m --verbose  "verbose output "
+  npm-module-stats --n=glob                  "Draw a statistics table for the latest
+                                             version "
+  npm-module-stats --n=glob --version="6.0.1"  "Draw a statistics table for the specific
+                                             version "
+  npm-module-stats --n=glob --format=html    "Ouput generated in HTML file "
+  npm-module-stats --name=glob --verbose     "verbose output "
 ```
 
 ### Output
+
+Default output is printed in Console. You may change it with `--format`
 
 ```
 ┌───────┬──────────────────┬─────────┬───────────────────┬─────────────────────────┐
